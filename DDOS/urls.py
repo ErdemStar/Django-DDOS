@@ -18,5 +18,7 @@ from django.contrib import admin
 from Manage import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^$', views.redirect),
     url(r'^index/',  views.index),
+    url(r'^Http_Flood/', views.Http_Flood),
 ]
