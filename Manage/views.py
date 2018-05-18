@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.shortcuts import render
-from Scripts.Hello import *
+from Scripts.httpFlood import HTTPFlood
 from django.http import HttpResponseRedirect
 
 
@@ -17,6 +17,9 @@ def Http_Flood(request):
         port    = request.POST["dport"]
         flag    = request.POST["flag"]
         count   = request.POST["count"]
-        print dst,port,flag,count
 
-    return render(request, "Http_Flood.html", {})
+        attack = HTTPFlood(dst,port,flag,count)
+        attack.Start()
+        return render(request, "Http_Flood.html", {})
+    elif request.method == "GET":
+        return render(request, "Http_Flood.html", {})
