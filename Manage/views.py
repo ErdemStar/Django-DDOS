@@ -14,11 +14,13 @@ def index(request):
 def Http_Flood(request):
     if request.method == "POST":
         dst     = request.POST["dst"]
-        port    = request.POST["dport"]
-        flag    = request.POST["flag"]
+        port    = 80
+        flag    = "S"
+        payload = request.POST["payload"]
         count   = request.POST["count"]
 
-        attack = HTTPFlood(dst,port,flag,count)
+
+        attack = HTTPFlood(dst,port,flag,payload,count)
         attack.Start()
         return render(request, "Http_Flood.html", {})
     elif request.method == "GET":
