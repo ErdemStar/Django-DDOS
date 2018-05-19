@@ -16,7 +16,7 @@ class PDF(FPDF):
         # Line break
         self.ln(20)
         #Logo
-        self.image(Path+'/bga.png', 10, 8, 33)
+        self.image(Path+'/PDF/bga.png', 10, 8, 33)
 
     # Page footer
     def footer(self):
@@ -27,19 +27,23 @@ class PDF(FPDF):
         # Page number
         self.cell(0, 10, 'Page ' + str(self.page_no()) + '/{nb}', 0, 0, 'C')
 
-# Instantiation of inherited class
 
 def CreatePDF(header,data):
     #Burada bga.png yolu bulunamıyordu aşağıdaki 2 satır bunun çözümü
     global Path
     global Header
-
+    """
+        Header bilgisi Saldırıdan saldırıya değişiyor.Bu yüzden header createPDF'i çağıran
+        kişi tarafında alınıyor.Data bilgisi ise saldırıdan sonra hedef ayakta ise ona göre
+        hedef ayakta yada değil bilgisi veriyor bu bilgide CreatePDF class'ını çağıram tarafından
+        veriliyor
+    """
     Header = header
     Current = os.path.dirname(__file__)
-    Path = os.path.abspath(os.path.join(Current+"/Scripts/", os.pardir))
+    Path = os.path.abspath(os.path.join(Current, os.pardir))
 
     time = datetime.datetime.now()
-    tmp = "Result "+str(time.year) + "." + str(time.month) + "." + str(time.day)+".pdf"
+    tmp = Header +" "+str(time.year) + "." + str(time.month) + "." + str(time.day)+".pdf"
 
     pdf = PDF()
     pdf.alias_nb_pages()

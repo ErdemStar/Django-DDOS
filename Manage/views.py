@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.shortcuts import render
-from Scripts.httpFlood import HTTPFlood
+from Scripts.HTTP.httpFlood import HTTPFlood
 from django.http import HttpResponseRedirect
 
 
