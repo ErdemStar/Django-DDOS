@@ -43,7 +43,7 @@ def CreatePDF(header,data):
     Path = os.path.abspath(os.path.join(Current, os.pardir))
 
     time = datetime.datetime.now()
-    tmp = Header +" "+str(time.year) + "." + str(time.month) + "." + str(time.day)+".pdf"
+    tmp = str(time.year) + "." + str(time.month) + "." + str(time.day)+" "+Header+".pdf"
 
     pdf = PDF()
     pdf.alias_nb_pages()
