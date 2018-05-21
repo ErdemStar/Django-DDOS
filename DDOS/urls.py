@@ -16,9 +16,12 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from Manage import views
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.redirect),
     url(r'^index/',  views.index),
     url(r'^Http_Flood/', views.Http_Flood),
+    url(r'^Tcp_Flood/', views.Tcp_Flood),
+    url(r'^Udp_Flood/', views.Udp_Flood),
 ]
