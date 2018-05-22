@@ -3,10 +3,7 @@ import json
 
 class Resolve():
     def __init__(self,url):
-        if "//" in url:
-            self.url = str(url).split("//")[1]
-        else:
-            self.url = url
+        self.url = str(url).replace("https://","").replace("http://","").replace("//","")
 
     def Get(self):
         resp = urllib2.urlopen(" https://dns-api.org/A/"+self.url).read()

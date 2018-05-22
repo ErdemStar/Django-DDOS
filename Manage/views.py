@@ -26,13 +26,16 @@ def Http_Flood(request):
         dst     = request.POST["dst"]
         port    = 80
         flag    = "S"
-        payload = request.POST["payload"]
+        method = request.POST["method"]
         count   = request.POST["count"]
 
+        if "http" in dst:
+            tmp = Resolve(dst)
+            dst = tmp.Get()
+        attack = HTTPFlood(dst,port,flag,method,count)
+        attack.ThreadStart()
 
-        attack = HTTPFlood(dst,port,flag,payload,count)
-        attack.Start()
-
+        
 
         return render(request, "Http_Flood.html", {})
     elif request.method == "GET":
@@ -99,7 +102,9 @@ def Icmp_Flood(request):
         gecici = isAlive(dst, "ICMP")
         CreatePDF("ICMP Flood", gecici)
 
-    return render(request,"Icmp_Flood.html")
+        return render(request,"Icmp_Flood.html")
+    elif request.method == "GET":
+        return render(request, "Icmp_Flood.html")
 
 def Dns_Flood(request):
     if request.method == "POST":
