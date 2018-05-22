@@ -5,9 +5,12 @@ from django.http import HttpResponseRedirect
 
 from Scripts.HTTP.httpFlood import HTTPFlood
 from Scripts.TCP.tcpFlood import TCPFlood
+from Scripts.UDP.udpFlood import UDPFlood
+from Scripts.DNS.dnsFLood import DNSFlood
+from Scripts.ICMP.icmpFlood import ICMPFlood
+
 from Scripts.PDF.createPDF import CreatePDF
 from Scripts.LIVE.isAlive import isAlive
-from Scripts.UDP.udpFlood import UDPFlood
 from Scripts.RESOLVE.DomainResolve import Resolve
 
 
@@ -78,3 +81,37 @@ def Udp_Flood(request):
 
     if request.method == "GET":
         return render(request, "Udp_Flood.html", {})
+
+def Icmp_Flood(request):
+    if request.method == "POST":
+        dst   = request.POST["dst"]
+        count = request.POST["count"]
+
+        if "http" in dst:
+            tut = Resolve(dst)
+            dst = tut.Get()
+            print dst
+
+
+        icmp = ICMPFlood(dst,count)
+        icmp.ThreadStart()
+
+        gecici = isAlive(dst, "ICMP")
+        CreatePDF("ICMP Flood", gecici)
+
+    return render(request,"Icmp_Flood.html")
+
+def Dns_Flood(request):
+    if request.method == "POST":
+        dst     = request.POST["dst"]
+        qname   = request.POST["qname"]
+        qtype   = request.POST["qtype"]
+        count   = request.POST["count"]
+
+        dns = DNSFlood(dst,qname,qtype,count)
+        dns.ThreadStart()
+
+        return render(request,"Dns_Flood.html")
+    elif request.method == "GET":
+        return render(request,"Dns_Flood.html")
+
